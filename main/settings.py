@@ -43,6 +43,8 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "corsheaders",
+
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -149,3 +151,5 @@ REST_FRAMEWORK = {
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+AUTH_USER_MODEL = "accounts.User"
