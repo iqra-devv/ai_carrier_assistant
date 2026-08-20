@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+from skills.models import Skill
 # Create your models here.
 class Resume(models.Model):
     user = models.ForeignKey(
@@ -37,3 +37,30 @@ class ResumeAnalysis(models.Model):
 
     def __str__(self):
         return f"Analysis for Resume {self.resume.id}"
+
+
+class Resume_SKill(models.Model):
+
+    resume = models.ForeignKey(
+        Resume,
+        on_delete = models.CASCADE,
+        related_name = "skills",
+    )
+
+    skill = models.ForeignKey(
+        Skill,
+        on_delete = models.CASCADE,
+        related_name = "resume_links",
+    )
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+            fields = ["resume","skill"],
+            name = "unique_resume_skill",
+            ) 
+        ]
+
+    def __str__(self):
+        return f"{self.resume} - {self.skill}"
+    
