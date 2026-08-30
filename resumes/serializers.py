@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Resume,ResumeAnalysis
+from .models import Resume,ResumeAnalysis,Resume_SKill
 
 class ResumeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,3 +41,18 @@ class ResumeAnalysisSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+class ResumeSkillSerializer(serializers.ModelSerializer):
+    resume = serializers.PrimaryKeyRelatedField(read_only=True)
+    class Meta:
+        model = Resume_SKill
+        fields = [
+            "id",
+            "resume",
+            "skill",
+        ] 
+        read_only_fields = [
+            "id"
+            "resume"
+        ]
+

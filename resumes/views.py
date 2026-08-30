@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import CreateAPIView
-from .models import Resume
-from .serializers import ResumeSerializer,ResumeAnalysisSerializer
+from .models import Resume,Resume_SKill
+from .serializers import ResumeSerializer,ResumeAnalysisSerializer,ResumeSkillSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.exceptions import PermissionDenied
 from .utils import extracted_text_from_pdf
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 class ResumeUploadView(CreateAPIView):
@@ -39,3 +40,17 @@ class ResumeAnalysisCreateView(CreateAPIView):
         extracted_text = extracted_text_from_pdf(resume.file)
         serializer.save(resume = resume, extracted_text = extracted_text,)
 
+class ResumeSKillCreateView(CreateAPIView):
+    serializer_class = ResumeSkillSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        resume_id = self.kwargs["resume_id"]
+
+        resume = get_object_or_404(
+            Resume,
+            id=resume_id,
+            user=self.request.user
+        )
+        serializer.save(resume=resume)
+     
